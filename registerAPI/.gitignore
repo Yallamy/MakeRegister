@@ -1,0 +1,14 @@
+/target/
+
+/.settings/
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+.classpath
+.project
+
+
