@@ -16,6 +16,8 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.registerApi.util.Mensagem;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -71,6 +73,7 @@ public class Pessoa {
 	@NotEmpty(message = Mensagem.CPF_REQUIRED)
 	private String cpf;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "pessoa")
 	private List<HistoricoPessoa> historico;
 	

@@ -17,4 +17,6 @@ public class Mensagem {
 	
 	public static final String DESC_ALTERACAO_REQUIRED = "O campo descrição da alteração é obrigatório";
 	
+	public static final String PESSOA_REQUIRED = "O campo pessoa do histórico é obrigatório";
+	
 }

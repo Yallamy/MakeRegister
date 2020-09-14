@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.hasToString;
 import static org.junit.Assert.assertThat;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -26,6 +27,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.google.gson.Gson;
 
 import br.com.registerApi.EntityGenericUtil;
 import br.com.registerApi.entity.HistoricoPessoa;
@@ -66,6 +69,8 @@ public class PessoaServiceImplTest {
 	private Pessoa pessoa;
 	
 	private Validator validator;
+	
+	private Date dtNascimento;
 
 	@SuppressWarnings("unchecked")
 	@Before
@@ -75,13 +80,19 @@ public class PessoaServiceImplTest {
 				.id(EntityGenericUtil.getLong())
 				.nome(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getString())
 				.build();
 		
-		pessoaResponse = Optional.of(this.pessoa);
+		this.pessoaResponse = Optional.of(this.pessoa);
+		this.pessoaServiceImpl.setGson(new Gson());
+		
+		Calendar dataInicial = Calendar.getInstance();
+		dataInicial.set(1950, Calendar.JANUARY, 1);
+		
+		this.dtNascimento = dataInicial.getTime();
 		
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
@@ -101,18 +112,12 @@ public class PessoaServiceImplTest {
 	//create
 	@Test
 	public void createTest() throws CustomException {
-		
-		Calendar dataInicial = Calendar.getInstance();
-		//dataInicial.set(1950, Calendar.JANUARY, 1);
-		dataInicial.set(1850, Calendar.JANUARY, 1);
-		//dataInicial.set(2850, Calendar.JANUARY, 1);
 
 		Pessoa request = Pessoa.builder()
 				.nome(EntityGenericUtil.getString())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				//.dtNascimento(EntityGenericUtil.getDate())
-				.dtNascimento(dataInicial.getTime())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getCPF())
@@ -126,6 +131,13 @@ public class PessoaServiceImplTest {
 	}
 	
 	@Test(expected=CustomException.class)
+	public void createPessoaNullTest() throws CustomException {
+
+		this.pessoaServiceImpl.init();
+		this.pessoaServiceImpl.create(null);
+	}
+	
+	@Test(expected=CustomException.class)
 	public void createPessoaJaCadastradaTest() throws CustomException {
 		
 		Mockito.when(this.repository.findByCpf(
@@ -135,7 +147,7 @@ public class PessoaServiceImplTest {
 				.nome(EntityGenericUtil.getString())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getCPF())
@@ -151,7 +163,7 @@ public class PessoaServiceImplTest {
 		Pessoa request = Pessoa.builder()
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getString())
@@ -167,7 +179,7 @@ public class PessoaServiceImplTest {
 	}
 	
 	@Test(expected=CustomException.class)
-	public void createPessoaSemDtNasciemntoTest() throws CustomException {
+	public void createPessoaSemDtNascimentoTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
 				.nome(EntityGenericUtil.getString())
@@ -194,7 +206,7 @@ public class PessoaServiceImplTest {
 				.nome(EntityGenericUtil.getString())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.build();
@@ -215,7 +227,7 @@ public class PessoaServiceImplTest {
 				.nome(EntityGenericUtil.getString())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getString())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getString())
@@ -237,7 +249,7 @@ public class PessoaServiceImplTest {
 				.nome(EntityGenericUtil.getString())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getString())
@@ -252,6 +264,46 @@ public class PessoaServiceImplTest {
 		assertThat(violations, contains(hasProperty("propertyPath", hasToString("cpf"))));
 	}
 	
+	@Test(expected=CustomException.class)
+	public void createDtInvalidaTest() throws CustomException {
+		
+		Calendar dataInvalida = Calendar.getInstance();
+		dataInvalida.set(1850, Calendar.JANUARY, 1);
+
+		Pessoa request = Pessoa.builder()
+				.nome(EntityGenericUtil.getString())
+				.sexo(EntityGenericUtil.getString())
+				.email(EntityGenericUtil.getEmail())
+				.dtNascimento(dataInvalida.getTime())
+				.naturalidade(EntityGenericUtil.getString())
+				.nacionalidade(EntityGenericUtil.getString())
+				.cpf(EntityGenericUtil.getCPF())
+				.build();
+		
+		this.pessoaServiceImpl.init();
+		this.pessoaServiceImpl.create(request);
+	}
+	
+	@Test(expected=CustomException.class)
+	public void createDtInvalidaFuturaTest() throws CustomException {
+		
+		Calendar dataInvalida = Calendar.getInstance();
+		dataInvalida.set(2050, Calendar.JANUARY, 1);
+
+		Pessoa request = Pessoa.builder()
+				.nome(EntityGenericUtil.getString())
+				.sexo(EntityGenericUtil.getString())
+				.email(EntityGenericUtil.getEmail())
+				.dtNascimento(dataInvalida.getTime())
+				.naturalidade(EntityGenericUtil.getString())
+				.nacionalidade(EntityGenericUtil.getString())
+				.cpf(EntityGenericUtil.getCPF())
+				.build();
+		
+		this.pessoaServiceImpl.init();
+		this.pessoaServiceImpl.create(request);
+	}
+	
 	//update
 	@Test
 	public void updateTest() throws CustomException {
@@ -261,7 +313,7 @@ public class PessoaServiceImplTest {
 				.nome(EntityGenericUtil.getString())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getCPF())
@@ -269,6 +321,13 @@ public class PessoaServiceImplTest {
 		
 		this.pessoaServiceImpl.init();
 		this.pessoaServiceImpl.update(request);
+	}
+	
+	@Test(expected=CustomException.class)
+	public void updatePessoaNullTest() throws CustomException {
+		
+		this.pessoaServiceImpl.init();
+		this.pessoaServiceImpl.update(null);
 	}
 	
 	@Test(expected=CustomException.class)
@@ -282,7 +341,7 @@ public class PessoaServiceImplTest {
 				.nome(EntityGenericUtil.getString())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getCPF())
@@ -303,7 +362,7 @@ public class PessoaServiceImplTest {
 				.nome(EntityGenericUtil.getString())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getCPF())
@@ -320,7 +379,7 @@ public class PessoaServiceImplTest {
 				.id(EntityGenericUtil.getLong())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getCPF())
@@ -363,7 +422,7 @@ public class PessoaServiceImplTest {
 				.nome(EntityGenericUtil.getString())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.build();
@@ -384,7 +443,7 @@ public class PessoaServiceImplTest {
 				.nome(EntityGenericUtil.getString())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getString())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getCPF())
@@ -406,7 +465,7 @@ public class PessoaServiceImplTest {
 				.nome(EntityGenericUtil.getString())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getString())
@@ -437,9 +496,7 @@ public class PessoaServiceImplTest {
 		Mockito.when(this.repository.findById(
 				Mockito.any(Long.class))).thenThrow(NoSuchElementException.class);
 		
-		Pessoa response = this.pessoaServiceImpl.retrieve(EntityGenericUtil.getLong());
-
-		TestCase.assertNull(response);
+		this.pessoaServiceImpl.retrieve(EntityGenericUtil.getLong());
 	}
 	
 	@Test(expected=CustomException.class)
@@ -448,15 +505,13 @@ public class PessoaServiceImplTest {
 		Mockito.when(this.repository.findById(
 				Mockito.any(Long.class))).thenReturn(null);
 		
-		Pessoa response = this.pessoaServiceImpl.retrieve(null);
-
-		TestCase.assertNotNull(response);
+		this.pessoaServiceImpl.retrieve(null);
 	}
 	
 	//delete
 	@Test
 	public void deleteTest() throws CustomException {
-		
+	
 		this.pessoaServiceImpl.delete(this.pessoa);
 	}
 	
@@ -482,7 +537,7 @@ public class PessoaServiceImplTest {
 				.nome(EntityGenericUtil.getString())
 				.sexo(EntityGenericUtil.getString())
 				.email(EntityGenericUtil.getEmail())
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
 				.cpf(EntityGenericUtil.getCPF())
@@ -569,7 +624,7 @@ public class PessoaServiceImplTest {
 	public void listPorDtNascimentoTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
-				.dtNascimento(EntityGenericUtil.getDate())
+				.dtNascimento(this.dtNascimento)
 				.build();
 		
 		Page<Pessoa> response = this.pessoaServiceImpl.list(request, pageable);

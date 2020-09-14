@@ -70,5 +70,11 @@ public class Constantes {
 	
 	//outras constantes
 	public static final String TAG_ERRO = "message";
+	
+	public static final int PERIODO_VALIDADE = 120;
+	
+	public static final String MSG_HIST_CRIACAO = "Criação da pessoa";
+	
+	public static final String MSG_HIST_ALTERACAO = "Alteração da pessoa: ";
 
 }

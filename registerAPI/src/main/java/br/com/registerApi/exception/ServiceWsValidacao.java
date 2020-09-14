@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum ServiceWsValidacao implements GenericValidacao{
 
 	PESSOA_NAO_ENCONTRADA("Pessoa não encontrada", HttpStatus.NOT_FOUND),
+	HISTORICO_NAO_ENCONTRADO("Historico não encontrado", HttpStatus.NOT_FOUND),
 	BAD_REQUEST("Campos obrigatórios não informados", HttpStatus.BAD_REQUEST),
 	CPF_INVALIDO("O CPF informado é inválido", HttpStatus.BAD_REQUEST),
 	EMAIL_INVALIDO("O Email informado é inválido", HttpStatus.BAD_REQUEST),

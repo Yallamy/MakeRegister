@@ -46,7 +46,8 @@ public class Util {
 	public static Calendar getDataInicial() {
 		
 		Calendar dataInicial = Calendar.getInstance();
-		dataInicial.set(1900, Calendar.JANUARY, 1);
+		dataInicial.set(Calendar.getInstance().get(Calendar.YEAR) - Constantes.PERIODO_VALIDADE, 
+				Calendar.JANUARY, 1);
 		
 		return dataInicial;
 	}

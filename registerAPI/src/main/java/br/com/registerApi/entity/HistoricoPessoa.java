@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -48,7 +49,7 @@ public class HistoricoPessoa {
 	private Long id;
 	
 	@Column(name = "dtAlteracao", nullable = false)
-	@NotEmpty(message = Mensagem.DT_ALTERACAO_REQUIRED)
+	@NotNull(message = Mensagem.DT_ALTERACAO_REQUIRED)
 	private Date dtAlteracao;
 	
 	@Column(name = "descAlteracao", nullable = false)
@@ -57,5 +58,6 @@ public class HistoricoPessoa {
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="idPessoa", nullable = false)
+	@NotNull(message = Mensagem.PESSOA_REQUIRED)
 	private Pessoa pessoa;
 }

@@ -68,10 +68,10 @@ public class UtilTest {
 	public void getDataInicial() {
 		
 		Calendar dataInicial = Calendar.getInstance();
-		dataInicial.set(1900, Calendar.JANUARY, 1);
+		dataInicial.set(Calendar.getInstance().get(Calendar.YEAR) - Constantes.PERIODO_VALIDADE, 
+				Calendar.JANUARY, 1);
 	
 		TestCase.assertEquals(dataInicial, util.getDataInicial());
-		
 	}
 
 }

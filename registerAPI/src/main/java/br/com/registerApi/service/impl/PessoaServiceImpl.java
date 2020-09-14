@@ -18,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
+
 import br.com.registerApi.entity.HistoricoPessoa;
 import br.com.registerApi.entity.Pessoa;
 import br.com.registerApi.exception.CustomException;
@@ -25,10 +27,13 @@ import br.com.registerApi.exception.ServiceWsValidacao;
 import br.com.registerApi.repository.PessoaRepository;
 import br.com.registerApi.service.HistoricoPessoaService;
 import br.com.registerApi.service.PessoaService;
+import br.com.registerApi.util.Constantes;
 import br.com.registerApi.util.Util;
 import br.com.twsoftware.alfred.cpf.CPF;
 import br.com.twsoftware.alfred.email.Email;
 import br.com.twsoftware.alfred.object.Objeto;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Classe que implementa os métodos do serviço para manter uma pessoa.
@@ -36,6 +41,7 @@ import br.com.twsoftware.alfred.object.Objeto;
  * @since 11 de set de 2020
  */
 @Service
+@Slf4j
 public class PessoaServiceImpl implements PessoaService {
 	
 	@Autowired
@@ -43,6 +49,10 @@ public class PessoaServiceImpl implements PessoaService {
 	
 	@Autowired
 	private HistoricoPessoaService historicoPessoaService;
+	
+	@Setter
+	@Autowired
+	private Gson gson;
 	
 	@Autowired
 	private Validator validator;
@@ -61,9 +71,13 @@ public class PessoaServiceImpl implements PessoaService {
 	@Override
 	public Pessoa create(Pessoa pessoa) throws CustomException {
 		
+		if(Objeto.isBlank(pessoa)) {
+			throw new CustomException(ServiceWsValidacao.BAD_REQUEST);
+		}
+		
 		Set<ConstraintViolation<Pessoa>> violations = validator.validate(pessoa);
 		
-		if(Objeto.isBlank(pessoa) || violations.size() > BigDecimal.ZERO.intValue()) {
+		if(violations.size() > BigDecimal.ZERO.intValue()) {
 			throw new CustomException(ServiceWsValidacao.BAD_REQUEST);
 		}
 		
@@ -81,7 +95,7 @@ public class PessoaServiceImpl implements PessoaService {
 		
 		HistoricoPessoa historico = HistoricoPessoa.builder()
 		.dtAlteracao(Calendar.getInstance().getTime())
-		.descAlteracao("Criação da pessoa")
+		.descAlteracao(Constantes.MSG_HIST_CRIACAO)
 		.pessoa(pessoaSalva)
 		.build();
 		
@@ -97,9 +111,15 @@ public class PessoaServiceImpl implements PessoaService {
 	@Override
 	public void update(Pessoa pessoa) throws CustomException {
 		
+		Pessoa pessoaCadastrada = null;
+		
+		if(Objeto.isBlank(pessoa)) {
+			throw new CustomException(ServiceWsValidacao.BAD_REQUEST);
+		}
+		
 		Set<ConstraintViolation<Pessoa>> violations = validator.validate(pessoa);
 		
-		if(Objeto.isBlank(pessoa) || violations.size() > BigDecimal.ZERO.intValue()
+		if(violations.size() > BigDecimal.ZERO.intValue()
 				|| Objeto.isBlank(pessoa.getId())) {
 			
 			throw new CustomException(ServiceWsValidacao.BAD_REQUEST);
@@ -110,7 +130,7 @@ public class PessoaServiceImpl implements PessoaService {
 		
 		try {
 			
-			Pessoa pessoaCadastrada = repository.findById(pessoa.getId()).get();
+			pessoaCadastrada = repository.findById(pessoa.getId()).get();
 			
 			//se houve mudança de CPF, verificar se o CPF já está cadastrado
 			if(Objeto.notBlank(pessoaCadastrada) && !pessoa.getCpf().equals(pessoaCadastrada.getCpf())) {
@@ -127,15 +147,15 @@ public class PessoaServiceImpl implements PessoaService {
 		}
 		
 		//salvando
-		repository.save(pessoa);
-		
 		HistoricoPessoa historico = HistoricoPessoa.builder()
 		.dtAlteracao(Calendar.getInstance().getTime())
-		.descAlteracao("Alteração da pessoa")
+		.descAlteracao(Constantes.MSG_HIST_ALTERACAO + gson.toJson(pessoaCadastrada))
 		.pessoa(pessoa)
 		.build();
 		
 		historicoPessoaService.create(historico);
+		
+		repository.save(pessoa);
 	}
 	
 	/*
@@ -172,6 +192,10 @@ public class PessoaServiceImpl implements PessoaService {
 		try {
 			
 			Pessoa pessoaSalva = repository.findById(pessoa.getId()).get(); 
+			
+			this.historicoPessoaService.delete(pessoaSalva);
+			
+			log.info("Deletando a pessoa: " + gson.toJson(pessoaSalva));
 			repository.delete(pessoaSalva);
 
 		} catch(NoSuchElementException ex) {
@@ -219,7 +243,7 @@ public class PessoaServiceImpl implements PessoaService {
 		}
 		
 		if(Calendar.getInstance().getTime().before(pessoa.getDtNascimento()) 
-				|| Util.getDataInicial().after(pessoa.getDtNascimento())) {
+				|| pessoa.getDtNascimento().before(Util.getDataInicial().getTime())) {
 			
 			throw new CustomException(ServiceWsValidacao.DATA_INVALIDA);
 		}
