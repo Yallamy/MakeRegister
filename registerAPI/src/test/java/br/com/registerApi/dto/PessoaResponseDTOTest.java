@@ -22,7 +22,7 @@ public class PessoaResponseDTOTest {
 	
 	private String nome;
 	
-	private String sexo;
+	private String genero;
 	
 	private String email;
 	
@@ -39,7 +39,7 @@ public class PessoaResponseDTOTest {
 
 		this.id = EntityGenericUtil.getLong();
 		this.nome = EntityGenericUtil.getString();
-		this.sexo = EntityGenericUtil.getString();
+		this.genero = EntityGenericUtil.getString();
 		this.email = EntityGenericUtil.getString();
 		this.dtNascimento = EntityGenericUtil.getDate();
 		this.naturalidade = EntityGenericUtil.getString();
@@ -50,13 +50,13 @@ public class PessoaResponseDTOTest {
 	@Test
 	public void getInstanceTest() {
 
-		PessoaResponseDTO response = new PessoaResponseDTO(this.id, this.nome, this.sexo, this.email, 
+		PessoaResponseDTO response = new PessoaResponseDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
 		TestCase.assertNotNull(response);
 		TestCase.assertEquals(this.id, response.getId());
 		TestCase.assertEquals(this.nome, response.getNome());
-		TestCase.assertEquals(this.sexo, response.getSexo());
+		TestCase.assertEquals(this.genero, response.getGenero());
 		TestCase.assertEquals(this.email, response.getEmail());
 		TestCase.assertEquals(this.dtNascimento, response.getDtNascimento());
 		TestCase.assertEquals(this.naturalidade, response.getNaturalidade());
@@ -72,7 +72,7 @@ public class PessoaResponseDTOTest {
 		TestCase.assertNotNull(response);
 		TestCase.assertEquals(null, response.getId());
 		TestCase.assertEquals(null, response.getNome());
-		TestCase.assertEquals(null, response.getSexo());
+		TestCase.assertEquals(null, response.getGenero());
 		TestCase.assertEquals(null, response.getEmail());
 		TestCase.assertEquals(null, response.getDtNascimento());
 		TestCase.assertEquals(null, response.getNaturalidade());
@@ -91,7 +91,7 @@ public class PessoaResponseDTOTest {
 		
 		response.setId(this.id);
 		response.setNome(this.nome);
-		response.setSexo(this.sexo);
+		response.setGenero(this.genero);
 		response.setEmail(this.email);
 		response.setDtNascimento(this.dtNascimento);
 		response.setNaturalidade(this.naturalidade);
@@ -100,7 +100,7 @@ public class PessoaResponseDTOTest {
 
 		TestCase.assertEquals(this.id, response.getId());
 		TestCase.assertEquals(this.nome, response.getNome());
-		TestCase.assertEquals(this.sexo, response.getSexo());
+		TestCase.assertEquals(this.genero, response.getGenero());
 		TestCase.assertEquals(this.email, response.getEmail());
 		TestCase.assertEquals(this.dtNascimento, response.getDtNascimento());
 		TestCase.assertEquals(this.naturalidade, response.getNaturalidade());
@@ -111,10 +111,10 @@ public class PessoaResponseDTOTest {
 	@Test
 	public void getEqualsTest() {
 
-		PessoaResponseDTO response = new PessoaResponseDTO(this.id, this.nome, this.sexo, this.email, 
+		PessoaResponseDTO response = new PessoaResponseDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 		
-		PessoaResponseDTO response2 = new PessoaResponseDTO(this.id, this.nome, this.sexo, this.email, 
+		PessoaResponseDTO response2 = new PessoaResponseDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
 		TestCase.assertNotNull(response);
@@ -125,10 +125,10 @@ public class PessoaResponseDTOTest {
 	@Test
 	public void getHashCodeTest() {
 
-		PessoaResponseDTO response = new PessoaResponseDTO(this.id, this.nome, this.sexo, this.email, 
+		PessoaResponseDTO response = new PessoaResponseDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 		
-		PessoaResponseDTO response2 = new PessoaResponseDTO(this.id, this.nome, this.sexo, this.email, 
+		PessoaResponseDTO response2 = new PessoaResponseDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
 		TestCase.assertNotNull(response);
@@ -139,7 +139,7 @@ public class PessoaResponseDTOTest {
 	@Test
 	public void getToStringTest() {
 
-		PessoaResponseDTO response = new PessoaResponseDTO(this.id, this.nome, this.sexo, this.email, 
+		PessoaResponseDTO response = new PessoaResponseDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
 		TestCase.assertNotNull(response);

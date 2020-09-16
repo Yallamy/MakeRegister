@@ -233,6 +233,7 @@ public class HistoricoPessoaServiceImplTest {
 	@Test
 	public void deleteTest() throws CustomException {
 
+		this.historicoPessoaServiceImpl.init();
 		this.historicoPessoaServiceImpl.delete(this.pessoa);
 	}
 
@@ -242,12 +243,14 @@ public class HistoricoPessoaServiceImplTest {
 		Mockito.when(this.repository.deleteAllByPessoa(
 				Mockito.any(Pessoa.class))).thenReturn(new Long(0));
 
+		this.historicoPessoaServiceImpl.init();
 		this.historicoPessoaServiceImpl.delete(this.pessoa);
 	}
 
 	@Test(expected=CustomException.class)
 	public void deletePessoamNullTest() throws CustomException {
 
+		this.historicoPessoaServiceImpl.init();
 		this.historicoPessoaServiceImpl.delete(null);
 	}
 
@@ -257,6 +260,7 @@ public class HistoricoPessoaServiceImplTest {
 		Pessoa request = Pessoa.builder()
 				.build();
 
+		this.historicoPessoaServiceImpl.init();
 		this.historicoPessoaServiceImpl.delete(request);
 	}
 

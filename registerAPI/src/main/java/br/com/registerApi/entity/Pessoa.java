@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,7 +19,9 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.Expose;
 
+import br.com.registerApi.enums.GeneroEnum;
 import br.com.registerApi.util.Mensagem;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -47,30 +51,39 @@ public class Pessoa {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seq_pessoa")
 	@Column(name = "id", nullable = false)
+	@Expose
 	private Long id;
 	
-	@Column(name = "nome", nullable = false)
+	@Column(name = "nome", nullable = false, length = 100)
 	@NotEmpty(message = Mensagem.NAME_REQUIRED)
+	@Expose
 	private String nome;
 	
-	@Column(name = "sexo")
-	private String sexo; //FIXME
+	@Column(name = "genero")
+	@Enumerated(EnumType.STRING)
+	@Expose
+	private GeneroEnum genero;
 	
-	@Column(name = "email")
+	@Column(name = "email", length = 100)
+	@Expose
 	private String email;
 	
 	@Column(name = "dtNascimento", nullable = false)
 	@NotNull(message = Mensagem.DATE_REQUIRED)
+	@Expose
 	private Date dtNascimento;
 	
-	@Column(name = "naturalidade")
+	@Column(name = "naturalidade", length = 100)
+	@Expose
 	private String naturalidade;
 	
-	@Column(name = "nacionalidade")
+	@Column(name = "nacionalidade", length = 100)
+	@Expose
 	private String nacionalidade;
 	
 	@Column(name = "cpf", nullable = false, unique = true) 
 	@NotEmpty(message = Mensagem.CPF_REQUIRED)
+	@Expose
 	private String cpf;
 	
 	@JsonIgnore

@@ -28,7 +28,7 @@ public class UtilTest {
 	public void convertModelMapper() {
 		
 		PessoaDTO source = new PessoaDTO(EntityGenericUtil.getString(), 
-				EntityGenericUtil.getString(), EntityGenericUtil.getString(), 
+				EntityGenericUtil.getGenero().getGenero(), EntityGenericUtil.getString(), 
 				EntityGenericUtil.getDate(), EntityGenericUtil.getString(),
 				EntityGenericUtil.getString(), EntityGenericUtil.getString());
 		
@@ -54,7 +54,7 @@ public class UtilTest {
 	public void convertModelMapperDestinationNull() {
 		
 		PessoaDTO source = new PessoaDTO(EntityGenericUtil.getString(), 
-				EntityGenericUtil.getString(), EntityGenericUtil.getString(), 
+				EntityGenericUtil.getGenero().getGenero(), EntityGenericUtil.getString(), 
 				EntityGenericUtil.getDate(), EntityGenericUtil.getString(),
 				EntityGenericUtil.getString(), EntityGenericUtil.getString());
 		

@@ -31,8 +31,8 @@ public class PessoaDTO implements Serializable {
 	@NotEmpty(message = Mensagem.NAME_REQUIRED)
 	private String nome;
 	
-	@ApiModelProperty(value = Constantes.PESSOA_SEXO, position = 2)
-	private String sexo;
+	@ApiModelProperty(value = Constantes.PESSOA_GENERO, position = 2)
+	private String genero;
 	
 	@ApiModelProperty(value = Constantes.PESSOA_EMAIL, position = 3)
 	private String email;

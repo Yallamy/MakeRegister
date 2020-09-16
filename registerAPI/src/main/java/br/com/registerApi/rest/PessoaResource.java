@@ -21,6 +21,7 @@ import br.com.registerApi.dto.PessoaDTO;
 import br.com.registerApi.dto.PessoaRequestDTO;
 import br.com.registerApi.dto.PessoaResponseDTO;
 import br.com.registerApi.entity.Pessoa;
+import br.com.registerApi.enums.GeneroEnum;
 import br.com.registerApi.exception.CustomException;
 import br.com.registerApi.service.PessoaService;
 import br.com.registerApi.util.Constantes;
@@ -55,6 +56,8 @@ public class PessoaResource {
 	public @ResponseBody ResponseEntity<?> create(@Valid @RequestBody PessoaDTO pessoaDTO) throws CustomException {
 		
 		Pessoa pessoa = Util.convertModelMapper(pessoaDTO, Pessoa.class);
+		pessoa.setGenero(GeneroEnum.obterGenero(pessoaDTO.getGenero()));
+		
 		pessoa = this.service.create(pessoa);
 		PessoaResponseDTO response = Util.convertModelMapper(pessoa, PessoaResponseDTO.class);
 		
@@ -79,6 +82,7 @@ public class PessoaResource {
 		
 		Pessoa pessoa = Util.convertModelMapper(pessoaDTO, Pessoa.class);
 		pessoa.setId(id);
+		pessoa.setGenero(GeneroEnum.obterGenero(pessoaDTO.getGenero()));
 		
 		this.service.update(pessoa);
 		PessoaResponseDTO response = Util.convertModelMapper(pessoa, PessoaResponseDTO.class);
@@ -141,6 +145,8 @@ public class PessoaResource {
 			@RequestBody PessoaRequestDTO pessoaDTO) throws CustomException {
 		
 		Pessoa pessoa = Util.convertModelMapper(pessoaDTO, Pessoa.class);
+		pessoa.setGenero(GeneroEnum.obterGenero(pessoaDTO.getGenero()));
+		
 		Page<Pessoa> response = this.service.list(pessoa, pageable);
 		
 		return ResponseEntity.ok(response);

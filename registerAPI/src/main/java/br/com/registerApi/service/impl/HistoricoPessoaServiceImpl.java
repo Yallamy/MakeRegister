@@ -18,6 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import br.com.registerApi.entity.HistoricoPessoa;
 import br.com.registerApi.entity.Pessoa;
 import br.com.registerApi.exception.CustomException;
@@ -40,6 +43,9 @@ public class HistoricoPessoaServiceImpl implements HistoricoPessoaService {
 	private HistoricoPessoaRepository repository;
 	
 	@Autowired
+	private Gson gson;
+	
+	@Autowired
 	private Validator validator;
 	
 	@PostConstruct
@@ -47,6 +53,8 @@ public class HistoricoPessoaServiceImpl implements HistoricoPessoaService {
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
+        
+        this.gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 	}
 	
 	/*
@@ -120,11 +128,20 @@ public class HistoricoPessoaServiceImpl implements HistoricoPessoaService {
 			throw new CustomException(ServiceWsValidacao.BAD_REQUEST);
 		}
 		
-		log.info("Deletando o historico da pessoa: " + pessoa.getId());
+		log.info("Deletando o historico da pessoa de id: " + pessoa.getId());
 		
-		Long registrosDeletados = repository.deleteAllByPessoa(pessoa);
+		List<HistoricoPessoa> historico = repository.findAllByPessoa(pessoa);
 		
-		log.info("Quantidade de registros deletados: " + registrosDeletados);
+		if(Objeto.notBlank(historico)) {
+			
+			Long registrosDeletados = repository.deleteAllByPessoa(pessoa);
+			
+			log.info("Quantidade de registros deletados: " + registrosDeletados);
+			
+			historico.forEach(hist -> {
+				log.info("historico: " + gson.toJson(hist));
+			});
+		}
 	}
 
 	/*

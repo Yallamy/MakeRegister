@@ -17,8 +17,10 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import br.com.registerApi.entity.HistoricoPessoa;
 import br.com.registerApi.entity.Pessoa;
@@ -32,7 +34,6 @@ import br.com.registerApi.util.Util;
 import br.com.twsoftware.alfred.cpf.CPF;
 import br.com.twsoftware.alfred.email.Email;
 import br.com.twsoftware.alfred.object.Objeto;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -41,6 +42,7 @@ import lombok.extern.slf4j.Slf4j;
  * @since 11 de set de 2020
  */
 @Service
+@Transactional
 @Slf4j
 public class PessoaServiceImpl implements PessoaService {
 	
@@ -50,7 +52,6 @@ public class PessoaServiceImpl implements PessoaService {
 	@Autowired
 	private HistoricoPessoaService historicoPessoaService;
 	
-	@Setter
 	@Autowired
 	private Gson gson;
 	
@@ -62,6 +63,8 @@ public class PessoaServiceImpl implements PessoaService {
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
+        
+        this.gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 	}
 	
 	/*
@@ -84,7 +87,7 @@ public class PessoaServiceImpl implements PessoaService {
 		//validações de regras de negócio
 		validarRegrasNegocio(pessoa);
 		
-		Pessoa pessoaCadastrada = repository.findByCpf(pessoa); 
+		Pessoa pessoaCadastrada = repository.findByCpf(pessoa.getCpf()); 
 		
 		if(Objeto.notBlank(pessoaCadastrada)) {
 			throw new CustomException(ServiceWsValidacao.CPF_JA_CADASTRADO);
@@ -135,7 +138,7 @@ public class PessoaServiceImpl implements PessoaService {
 			//se houve mudança de CPF, verificar se o CPF já está cadastrado
 			if(Objeto.notBlank(pessoaCadastrada) && !pessoa.getCpf().equals(pessoaCadastrada.getCpf())) {
 				
-				pessoaCadastrada = repository.findByCpf(pessoa); 
+				pessoaCadastrada = repository.findByCpf(pessoa.getCpf()); 
 				
 				if(Objeto.notBlank(pessoaCadastrada)) {
 					throw new CustomException(ServiceWsValidacao.CPF_JA_CADASTRADO);

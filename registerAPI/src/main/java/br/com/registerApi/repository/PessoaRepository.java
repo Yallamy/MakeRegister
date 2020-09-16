@@ -15,11 +15,11 @@ public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
 	
 	/**
 	 * Método que recupera uma pessoa por CPF
-	 * @param pessoa
+	 * @param cpf
 	 * @return Pessoa
 	 * @author Yallamy Nascimento (yallamy@gmail.com)
 	 * @since 11 de set de 2020
 	 */
-	public Pessoa findByCpf(Pessoa pessoa);
+	public Pessoa findByCpf(String cpf);
 
 }

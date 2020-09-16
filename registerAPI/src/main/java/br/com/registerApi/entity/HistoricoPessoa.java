@@ -17,6 +17,9 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.annotations.Expose;
+
 import br.com.registerApi.util.Mensagem;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -46,18 +49,22 @@ public class HistoricoPessoa {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seq_HistPessoa")
 	@Column(name = "id", nullable = false)
+	@Expose
 	private Long id;
 	
 	@Column(name = "dtAlteracao", nullable = false)
 	@NotNull(message = Mensagem.DT_ALTERACAO_REQUIRED)
+	@Expose
 	private Date dtAlteracao;
 	
-	@Column(name = "descAlteracao", nullable = false)
+	@Column(name = "descAlteracao", nullable = false, length = 3000)
 	@NotEmpty(message = Mensagem.DESC_ALTERACAO_REQUIRED)
+	@Expose
 	private String descAlteracao;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="idPessoa", nullable = false)
 	@NotNull(message = Mensagem.PESSOA_REQUIRED)
+	@JsonIgnore
 	private Pessoa pessoa;
 }

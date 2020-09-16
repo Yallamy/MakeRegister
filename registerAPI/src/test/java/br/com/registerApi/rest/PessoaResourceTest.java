@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import br.com.registerApi.EntityGenericUtil;
 import br.com.registerApi.RegisterAPI;
@@ -51,9 +52,12 @@ public class PessoaResourceTest {
 				.build();
 		
 		this.request = new PessoaDTO(EntityGenericUtil.getString(), 
-				EntityGenericUtil.getString(), EntityGenericUtil.getEmail(), 
+				EntityGenericUtil.getGenero().getGenero(), EntityGenericUtil.getEmail(), 
 				EntityGenericUtil.getDate(), EntityGenericUtil.getString(),
 				EntityGenericUtil.getString(), EntityGenericUtil.getCPF());
+		
+		this.gson = new GsonBuilder()
+				   .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
 	}
 	
 	//create
@@ -126,6 +130,13 @@ public class PessoaResourceTest {
 	//update
 	@Test
 	public void updateTest() throws Exception {
+		
+		this.request.setCpf(EntityGenericUtil.getCPF());
+		
+		this.mockMvc.perform(MockMvcRequestBuilders.post(this.urlBase)
+				.content(gson.toJson(request))
+        		.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isOk());
 		
 		this.request.setNome(EntityGenericUtil.getString());
 
@@ -205,6 +216,13 @@ public class PessoaResourceTest {
 	@Test
 	public void retrieveTest() throws Exception {
 		
+		this.request.setCpf(EntityGenericUtil.getCPF());
+		
+		this.mockMvc.perform(MockMvcRequestBuilders.post(this.urlBase)
+				.content(gson.toJson(request))
+        		.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+				.andExpect(MockMvcResultMatchers.status().isOk());
+		
 		this.mockMvc.perform(MockMvcRequestBuilders.get(this.urlBase + 1)
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
 				.andExpect(MockMvcResultMatchers.status().isOk());
@@ -259,10 +277,10 @@ public class PessoaResourceTest {
 	}
 	
 	@Test
-	public void listPorSexoTest() throws Exception {
+	public void listPorGeneroTest() throws Exception {
 
 		PessoaRequestDTO filtro = PessoaRequestDTO.builder()
-				.sexo(request.getSexo()).build();
+				.genero(request.getGenero()).build();
 		
 		this.mockMvc.perform(MockMvcRequestBuilders.get(this.urlBase)
 				.content(this.gson.toJson(filtro))

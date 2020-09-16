@@ -5,12 +5,14 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomUtils;
 
+import br.com.registerApi.enums.GeneroEnum;
 import br.com.twsoftware.alfred.cpf.CPF;
 
 /**
@@ -43,7 +45,7 @@ public class EntityGenericUtil {
 	}
 
 	public static Date getDate() {
-		return new Date();
+		return Calendar.getInstance().getTime();
 	}
 
 	public static LocalDateTime getDateTime() {
@@ -79,6 +81,10 @@ public class EntityGenericUtil {
 	
 	public static String getCPF() {
 		return CPF.gerar();
+	}
+	
+	public static GeneroEnum getGenero() {
+		return GeneroEnum.obterGenero(getString());
 	}
 
 	public static Object getByType(Class<?> type) {

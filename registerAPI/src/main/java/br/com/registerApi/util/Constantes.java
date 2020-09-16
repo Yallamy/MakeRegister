@@ -12,7 +12,7 @@ public class Constantes {
 	
 	
 	//PATHS
-	public static final String PATH_RAIZ = "/api/register";
+	public static final String PATH_RAIZ = "/api/v1/register";
 
     public static final String PATH_SWAGGER = "/docs";
     
@@ -27,9 +27,9 @@ public class Constantes {
     
     public static final String CREATE_PESSOA_NOTES = "Cria uma pessoa.";
     
-    public static final String UPDATE_PESSOA = "Atualizar uma pessoa ";
+    public static final String UPDATE_PESSOA = "Alterar uma pessoa ";
     
-    public static final String UPDATE_PESSOA_NOTES = "Atualiza uma pessoa.";
+    public static final String UPDATE_PESSOA_NOTES = "Altera uma pessoa.";
     
     public static final String RETRIEVE_PESSOA = "Recuperar uma pessoa";
     
@@ -53,7 +53,7 @@ public class Constantes {
 	
 	public static final String PESSOA_NOME = "Nome da pessoa";
 	
-	public static final String PESSOA_SEXO = "Sexo da pessoa";
+	public static final String PESSOA_GENERO = "Gênero da pessoa: Masculino, Feminino, Outros";
 	
 	public static final String PESSOA_EMAIL = "E-mail da pessoa";
 	
@@ -75,6 +75,6 @@ public class Constantes {
 	
 	public static final String MSG_HIST_CRIACAO = "Criação da pessoa";
 	
-	public static final String MSG_HIST_ALTERACAO = "Alteração da pessoa: ";
+	public static final String MSG_HIST_ALTERACAO = "pessoa: ";
 
 }

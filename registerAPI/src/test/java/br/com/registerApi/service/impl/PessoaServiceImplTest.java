@@ -28,8 +28,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.google.gson.Gson;
-
 import br.com.registerApi.EntityGenericUtil;
 import br.com.registerApi.entity.HistoricoPessoa;
 import br.com.registerApi.entity.Pessoa;
@@ -87,7 +85,6 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaResponse = Optional.of(this.pessoa);
-		this.pessoaServiceImpl.setGson(new Gson());
 		
 		Calendar dataInicial = Calendar.getInstance();
 		dataInicial.set(1950, Calendar.JANUARY, 1);
@@ -100,7 +97,7 @@ public class PessoaServiceImplTest {
 		Mockito.when(this.repository.save(
 				Mockito.any(Pessoa.class))).thenReturn(this.pessoa);
 		Mockito.when(this.repository.findByCpf(
-				Mockito.any(Pessoa.class))).thenReturn(null);
+				Mockito.any(String.class))).thenReturn(null);
 		Mockito.when(this.repository.findById(
 				Mockito.any(Long.class))).thenReturn(this.pessoaResponse);
 		Mockito.when(this.repository.findAll(
@@ -115,7 +112,7 @@ public class PessoaServiceImplTest {
 
 		Pessoa request = Pessoa.builder()
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -141,11 +138,11 @@ public class PessoaServiceImplTest {
 	public void createPessoaJaCadastradaTest() throws CustomException {
 		
 		Mockito.when(this.repository.findByCpf(
-				Mockito.any(Pessoa.class))).thenReturn(this.pessoa);
+				Mockito.any(String.class))).thenReturn(this.pessoa);
 
 		Pessoa request = Pessoa.builder()
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -161,7 +158,7 @@ public class PessoaServiceImplTest {
 	public void createPessoaSemNomeTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -183,7 +180,7 @@ public class PessoaServiceImplTest {
 
 		Pessoa request = Pessoa.builder()
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
@@ -204,7 +201,7 @@ public class PessoaServiceImplTest {
 
 		Pessoa request = Pessoa.builder()
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -225,7 +222,7 @@ public class PessoaServiceImplTest {
 
 		Pessoa request = Pessoa.builder()
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getString())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -247,7 +244,7 @@ public class PessoaServiceImplTest {
 
 		Pessoa request = Pessoa.builder()
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -272,7 +269,7 @@ public class PessoaServiceImplTest {
 
 		Pessoa request = Pessoa.builder()
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(dataInvalida.getTime())
 				.naturalidade(EntityGenericUtil.getString())
@@ -292,7 +289,7 @@ public class PessoaServiceImplTest {
 
 		Pessoa request = Pessoa.builder()
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(dataInvalida.getTime())
 				.naturalidade(EntityGenericUtil.getString())
@@ -311,7 +308,7 @@ public class PessoaServiceImplTest {
 		Pessoa request = Pessoa.builder()
 				.id(EntityGenericUtil.getLong())
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -334,12 +331,12 @@ public class PessoaServiceImplTest {
 	public void updatePessoaJaCadastradaTest() throws CustomException {
 		
 		Mockito.when(this.repository.findByCpf(
-				Mockito.any(Pessoa.class))).thenReturn(this.pessoa);
+				Mockito.any(String.class))).thenReturn(this.pessoa);
 
 		Pessoa request = Pessoa.builder()
 				.id(EntityGenericUtil.getLong())
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -360,7 +357,7 @@ public class PessoaServiceImplTest {
 		Pessoa request = Pessoa.builder()
 				.id(EntityGenericUtil.getLong())
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -377,7 +374,7 @@ public class PessoaServiceImplTest {
 
 		Pessoa request = Pessoa.builder()
 				.id(EntityGenericUtil.getLong())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -399,7 +396,7 @@ public class PessoaServiceImplTest {
 		Pessoa request = Pessoa.builder()
 				.id(EntityGenericUtil.getLong())
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.naturalidade(EntityGenericUtil.getString())
 				.nacionalidade(EntityGenericUtil.getString())
@@ -420,7 +417,7 @@ public class PessoaServiceImplTest {
 		Pessoa request = Pessoa.builder()
 				.id(EntityGenericUtil.getLong())
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -441,7 +438,7 @@ public class PessoaServiceImplTest {
 		Pessoa request = Pessoa.builder()
 				.id(EntityGenericUtil.getLong())
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getString())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -463,7 +460,7 @@ public class PessoaServiceImplTest {
 		Pessoa request = Pessoa.builder()
 				.id(EntityGenericUtil.getLong())
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())
@@ -512,6 +509,7 @@ public class PessoaServiceImplTest {
 	@Test
 	public void deleteTest() throws CustomException {
 	
+		this.pessoaServiceImpl.init();
 		this.pessoaServiceImpl.delete(this.pessoa);
 	}
 	
@@ -521,12 +519,14 @@ public class PessoaServiceImplTest {
 		Mockito.when(this.repository.findById(
 				Mockito.any(Long.class))).thenThrow(NoSuchElementException.class);
 		
+		this.pessoaServiceImpl.init();
 		this.pessoaServiceImpl.delete(this.pessoa);
 	}
 	
 	@Test(expected=CustomException.class)
 	public void deletePessoamNullTest() throws CustomException {
 		
+		this.pessoaServiceImpl.init();
 		this.pessoaServiceImpl.delete(null);
 	}
 	
@@ -535,7 +535,7 @@ public class PessoaServiceImplTest {
 
 		Pessoa request = Pessoa.builder()
 				.nome(EntityGenericUtil.getString())
-				.sexo(EntityGenericUtil.getString())
+				.genero(EntityGenericUtil.getGenero())
 				.email(EntityGenericUtil.getEmail())
 				.dtNascimento(this.dtNascimento)
 				.naturalidade(EntityGenericUtil.getString())

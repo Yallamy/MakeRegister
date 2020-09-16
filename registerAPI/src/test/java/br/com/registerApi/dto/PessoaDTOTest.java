@@ -34,7 +34,7 @@ public class PessoaDTOTest {
 	
 	private String nome;
 	
-	private String sexo;
+	private String genero;
 	
 	private String email;
 	
@@ -50,7 +50,7 @@ public class PessoaDTOTest {
 	public void setup() {
 
 		this.nome = EntityGenericUtil.getString();
-		this.sexo = EntityGenericUtil.getString();
+		this.genero = EntityGenericUtil.getGenero().getGenero();
 		this.email = EntityGenericUtil.getString();
 		this.dtNascimento = EntityGenericUtil.getDate();
 		this.naturalidade = EntityGenericUtil.getString();
@@ -64,12 +64,12 @@ public class PessoaDTOTest {
 	@Test
 	public void getInstanceTest() {
 
-		PessoaDTO request = new PessoaDTO(this.nome, this.sexo, this.email, 
+		PessoaDTO request = new PessoaDTO(this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
 		TestCase.assertNotNull(request);
 		TestCase.assertEquals(this.nome, request.getNome());
-		TestCase.assertEquals(this.sexo, request.getSexo());
+		TestCase.assertEquals(this.genero, request.getGenero());
 		TestCase.assertEquals(this.email, request.getEmail());
 		TestCase.assertEquals(this.dtNascimento, request.getDtNascimento());
 		TestCase.assertEquals(this.naturalidade, request.getNaturalidade());
@@ -84,7 +84,7 @@ public class PessoaDTOTest {
 
 		TestCase.assertNotNull(request);
 		TestCase.assertEquals(null, request.getNome());
-		TestCase.assertEquals(null, request.getSexo());
+		TestCase.assertEquals(null, request.getGenero());
 		TestCase.assertEquals(null, request.getEmail());
 		TestCase.assertEquals(null, request.getDtNascimento());
 		TestCase.assertEquals(null, request.getNaturalidade());
@@ -95,7 +95,7 @@ public class PessoaDTOTest {
 	@Test
 	public void getInstanceTestNomeNull() {
 
-		PessoaDTO request = new PessoaDTO(null, this.sexo, this.email, 
+		PessoaDTO request = new PessoaDTO(null, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
 		TestCase.assertNotNull(request);
@@ -107,7 +107,7 @@ public class PessoaDTOTest {
 	@Test
 	public void getInstanceTestDtNascimentoNull() {
 
-		PessoaDTO request = new PessoaDTO(this.nome, this.sexo, this.email, 
+		PessoaDTO request = new PessoaDTO(this.nome, this.genero, this.email, 
 				null, this.naturalidade, this.nacionalidade, this.cpf);
 
 		TestCase.assertNotNull(request);
@@ -119,7 +119,7 @@ public class PessoaDTOTest {
 	@Test
 	public void getInstanceTestCPFNull() {
 
-		PessoaDTO request = new PessoaDTO(this.nome, this.sexo, this.email, 
+		PessoaDTO request = new PessoaDTO(this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, null);
 
 		TestCase.assertNotNull(request);
@@ -132,12 +132,12 @@ public class PessoaDTOTest {
 	public void setAndGetAllFieldsTest() {
 
 		PessoaDTO request = new PessoaDTO(EntityGenericUtil.getString(), 
-				EntityGenericUtil.getString(), EntityGenericUtil.getString(), 
+				EntityGenericUtil.getGenero().getGenero(), EntityGenericUtil.getString(), 
 				EntityGenericUtil.getDate(), EntityGenericUtil.getString(),
 				EntityGenericUtil.getString(), EntityGenericUtil.getString());
 		
 		request.setNome(this.nome);
-		request.setSexo(this.sexo);
+		request.setGenero(this.genero);
 		request.setEmail(this.email);
 		request.setDtNascimento(this.dtNascimento);
 		request.setNaturalidade(this.naturalidade);
@@ -145,7 +145,7 @@ public class PessoaDTOTest {
 		request.setCpf(this.cpf);
 
 		TestCase.assertEquals(this.nome, request.getNome());
-		TestCase.assertEquals(this.sexo, request.getSexo());
+		TestCase.assertEquals(this.genero, request.getGenero());
 		TestCase.assertEquals(this.email, request.getEmail());
 		TestCase.assertEquals(this.dtNascimento, request.getDtNascimento());
 		TestCase.assertEquals(this.naturalidade, request.getNaturalidade());
@@ -156,10 +156,10 @@ public class PessoaDTOTest {
 	@Test
 	public void getEqualsTest() {
 
-		PessoaDTO request = new PessoaDTO(this.nome, this.sexo, this.email, 
+		PessoaDTO request = new PessoaDTO(this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 		
-		PessoaDTO request2 = new PessoaDTO(this.nome, this.sexo, this.email, 
+		PessoaDTO request2 = new PessoaDTO(this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
 		TestCase.assertNotNull(request);
@@ -170,10 +170,10 @@ public class PessoaDTOTest {
 	@Test
 	public void getHashCodeTest() {
 
-		PessoaDTO request = new PessoaDTO(this.nome, this.sexo, this.email, 
+		PessoaDTO request = new PessoaDTO(this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 		
-		PessoaDTO request2 = new PessoaDTO(this.nome, this.sexo, this.email, 
+		PessoaDTO request2 = new PessoaDTO(this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
 		TestCase.assertNotNull(request);
@@ -184,7 +184,7 @@ public class PessoaDTOTest {
 	@Test
 	public void getToStringTest() {
 
-		PessoaDTO request = new PessoaDTO(this.nome, this.sexo, this.email, 
+		PessoaDTO request = new PessoaDTO(this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
 		TestCase.assertNotNull(request);
