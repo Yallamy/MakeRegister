@@ -1,0 +1,73 @@
+<div class="example-container mat-elevation-z8">
+  <div class="example-loading-shade"
+       *ngIf="isLoadingResults">
+    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+  </div>
+  <div class="button-row">
+    <a mat-flat-button color="primary" (click)="pessoaDetails()"><mat-icon>info</mat-icon></a>
+  </div>
+  <mat-card class="example-card">
+    <form [formGroup]="pessoaForm" (ngSubmit)="onFormSubmit(pessoaForm.value)">
+	   
+	  <mat-form-field class="example-full-width">
+        <input matInput placeholder="Nome" formControlName="nome"
+               <!--[errorStateMatcher]="matcher"--> >
+        <mat-error>
+          <span *ngIf="!pessoaForm.get('nome').valid && pessoaForm.get('nome').touched">Por favor, entre com o nome da pessoa</span>
+        </mat-error>
+      </mat-form-field>
+	  
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Sexo" formControlName="sexo"
+               <!--[errorStateMatcher]="matcher"--> >
+        <mat-error>
+          <span *ngIf="!pessoaForm.get('sexo').valid && pessoaForm.get('sexo').touched">Por favor, escolha o sexo da pessoa</span>
+        </mat-error>
+      </mat-form-field>
+	  
+	  <mat-form-field class="example-full-width">
+        <input matInput placeholder="E-mail" formControlName="email"
+               <!--[errorStateMatcher]="matcher"--> >
+        <mat-error>
+          <span *ngIf="!pessoaForm.get('email').valid && pessoaForm.get('email').touched">Por favor, informe o email da pessoa</span>
+        </mat-error>
+      </mat-form-field>
+	  
+	  <mat-form-field class="example-full-width">
+        <input matInput placeholder="Data de Nascimento" formControlName="dtNascimento"
+               <!--[errorStateMatcher]="matcher"--> >
+        <mat-error>
+          <span *ngIf="!pessoaForm.get('dtNascimento').valid && pessoaForm.get('dtNascimento').touched">Por favor, informe a data de nascimento da pessoa</span>
+        </mat-error>
+      </mat-form-field>
+	  
+	  <mat-form-field class="example-full-width">
+        <input matInput placeholder="Naturalidade" formControlName="naturalidade"
+               <!--[errorStateMatcher]="matcher"--> >
+        <mat-error>
+          <span *ngIf="!pessoaForm.get('naturalidade').valid && pessoaForm.get('naturalidade').touched">Por favor, informe a naturalidade da pessoa</span>
+        </mat-error>
+      </mat-form-field>
+	  
+	  <mat-form-field class="example-full-width">
+        <input matInput placeholder="Nacionalidade" formControlName="nacionalidade"
+               <!--[errorStateMatcher]="matcher"--> >
+        <mat-error>
+          <span *ngIf="!pessoaForm.get('nacionalidade').valid && pessoaForm.get('nacionalidade').touched">Por favor, informe a nacionalidade da pessoa</span>
+        </mat-error>
+      </mat-form-field>
+	  
+	  <mat-form-field class="example-full-width">
+        <input matInput placeholder="CPF" formControlName="cpf"
+               <!--[errorStateMatcher]="matcher"--> >
+        <mat-error>
+          <span *ngIf="!pessoaForm.get('cpf').valid && pessoaForm.get('cpf').touched">Por favor, informe o cpf da pessoa</span>
+        </mat-error>
+      </mat-form-field> 
+
+      <div class="button-row">
+        <button type="submit" [disabled]="!pessoaForm.valid" mat-flat-button color="primary"><mat-icon>save</mat-icon></button>
+      </div>
+    </form>
+  </mat-card>
+</div>
