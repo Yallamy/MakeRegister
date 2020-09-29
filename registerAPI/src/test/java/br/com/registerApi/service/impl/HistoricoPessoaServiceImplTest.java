@@ -1,46 +1,37 @@
 package br.com.registerApi.service.impl;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasToString;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.registerApi.EntityGenericUtil;
 import br.com.registerApi.entity.HistoricoPessoa;
 import br.com.registerApi.entity.Pessoa;
 import br.com.registerApi.exception.CustomException;
 import br.com.registerApi.repository.HistoricoPessoaRepository;
-import junit.framework.TestCase;
 
 /**
  * Classe de teste que representa os cenários de testes da classe {@link HistoricoPessoaServiceImpl}
  * @author Yallamy Nascimento (yallamy@gmail.com)
  * @since 11 de set de 2020
  */
-@RunWith(SpringRunner.class)
+@SpringBootTest
 public class HistoricoPessoaServiceImplTest {
 	
 	@InjectMocks
@@ -63,11 +54,9 @@ public class HistoricoPessoaServiceImplTest {
 	private Optional<HistoricoPessoa> historicoResponse;
 	
 	private HistoricoPessoa historico;
-	
-	private Validator validator;
 
 	@SuppressWarnings("unchecked")
-	@Before
+	@BeforeEach
 	public void setup() throws CustomException {
 		
 		this.historico = HistoricoPessoa.builder()
@@ -76,9 +65,6 @@ public class HistoricoPessoaServiceImplTest {
 				.descAlteracao(EntityGenericUtil.getString())
 				.pessoa(this.pessoa)
 				.build();
-		
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        this.validator = factory.getValidator();
         
         this.historicoResponse = Optional.of(this.historico);
         
@@ -110,18 +96,21 @@ public class HistoricoPessoaServiceImplTest {
 		this.historicoPessoaServiceImpl.init();
 		HistoricoPessoa response = this.historicoPessoaServiceImpl.create(request);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getId());
+		assertNotNull(response);
+		assertNotNull(response.getId());
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createHistoricoNullTest() throws CustomException {
 
 		this.historicoPessoaServiceImpl.init();
-		this.historicoPessoaServiceImpl.create(null);
+		
+		assertThrows(CustomException.class, () -> {
+			this.historicoPessoaServiceImpl.create(null);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createDtAlteracaoNullTest() throws CustomException {
 		
 		HistoricoPessoa request = HistoricoPessoa.builder()
@@ -130,14 +119,13 @@ public class HistoricoPessoaServiceImplTest {
 				.build();
 
 		this.historicoPessoaServiceImpl.init();
-		this.historicoPessoaServiceImpl.create(request);
 		
-		Set<ConstraintViolation<HistoricoPessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("dtAlteracao"))));
+		assertThrows(CustomException.class, () -> {
+			this.historicoPessoaServiceImpl.create(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createDescAlteracaoNullTest() throws CustomException {
 		
 		HistoricoPessoa request = HistoricoPessoa.builder()
@@ -146,14 +134,13 @@ public class HistoricoPessoaServiceImplTest {
 				.build();
 
 		this.historicoPessoaServiceImpl.init();
-		this.historicoPessoaServiceImpl.create(request);
 		
-		Set<ConstraintViolation<HistoricoPessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("descAlteracao"))));
+		assertThrows(CustomException.class, () -> {
+			this.historicoPessoaServiceImpl.create(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createPessoaNullTest() throws CustomException {
 		
 		HistoricoPessoa request = HistoricoPessoa.builder()
@@ -162,11 +149,10 @@ public class HistoricoPessoaServiceImplTest {
 				.build();
 
 		this.historicoPessoaServiceImpl.init();
-		this.historicoPessoaServiceImpl.create(request);
 		
-		Set<ConstraintViolation<HistoricoPessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("pessoa"))));
+		assertThrows(CustomException.class, () -> {
+			this.historicoPessoaServiceImpl.create(request);
+		});
 	}
 	
 	//retrieve
@@ -175,22 +161,24 @@ public class HistoricoPessoaServiceImplTest {
 		
 		HistoricoPessoa response = this.historicoPessoaServiceImpl.retrieve(EntityGenericUtil.getLong());
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getId());
-		TestCase.assertEquals(this.historico, response);
+		assertNotNull(response);
+		assertNotNull(response.getId());
+		assertEquals(this.historico, response);
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void retrieveNotFoundTest() throws CustomException {
 		
 		Mockito.when(this.repository.findById(
 				Mockito.any(Long.class))).thenThrow(NoSuchElementException.class);
 		
-		this.historicoPessoaServiceImpl.retrieve(EntityGenericUtil.getLong());
+		assertThrows(CustomException.class, () -> {
+			this.historicoPessoaServiceImpl.retrieve(EntityGenericUtil.getLong());
+		});
 
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void retrieveComNullTest() throws CustomException {
 		
 		Long request = null;
@@ -198,7 +186,9 @@ public class HistoricoPessoaServiceImplTest {
 		Mockito.when(this.repository.findById(
 				Mockito.any(Long.class))).thenReturn(null);
 		
-		this.historicoPessoaServiceImpl.retrieve(request);
+		assertThrows(CustomException.class, () -> {
+			this.historicoPessoaServiceImpl.retrieve(request);
+		});
 	}
 	
 	//retrieve por pessoa
@@ -207,26 +197,30 @@ public class HistoricoPessoaServiceImplTest {
 
 		List<HistoricoPessoa> response = this.historicoPessoaServiceImpl.retrieve(this.pessoa);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertTrue(response.size() == 1);
+		assertNotNull(response);
+		assertTrue(response.size() == 1);
 	}
 
-	@Test(expected=CustomException.class)
+	@Test()
 	public void retrieveByPessoaNotFoundTest() throws CustomException {
 
 		Mockito.when(this.repository.findAllByPessoa(
 				Mockito.any(Pessoa.class))).thenReturn(null);
-
-		this.historicoPessoaServiceImpl.retrieve(this.pessoa);
+		
+		assertThrows(CustomException.class, () -> {
+			this.historicoPessoaServiceImpl.retrieve(this.pessoa);
+		});
 
 	}
 
-	@Test(expected=CustomException.class)
+	@Test()
 	public void retrieveByPessoaComNullTest() throws CustomException {
 
 		Pessoa request = null;
-
-		this.historicoPessoaServiceImpl.retrieve(request);
+		
+		assertThrows(CustomException.class, () -> {
+			this.historicoPessoaServiceImpl.retrieve(request);
+		});
 	}
 	
 	//delete
@@ -247,21 +241,27 @@ public class HistoricoPessoaServiceImplTest {
 		this.historicoPessoaServiceImpl.delete(this.pessoa);
 	}
 
-	@Test(expected=CustomException.class)
+	@Test()
 	public void deletePessoamNullTest() throws CustomException {
 
 		this.historicoPessoaServiceImpl.init();
-		this.historicoPessoaServiceImpl.delete(null);
+		
+		assertThrows(CustomException.class, () -> {
+			this.historicoPessoaServiceImpl.delete(null);
+		});
 	}
 
-	@Test(expected=CustomException.class)
+	@Test()
 	public void deletePessoaSemIdTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
 				.build();
 
 		this.historicoPessoaServiceImpl.init();
-		this.historicoPessoaServiceImpl.delete(request);
+		
+		assertThrows(CustomException.class, () -> {
+			this.historicoPessoaServiceImpl.delete(request);
+		});
 	}
 
 	//list
@@ -273,8 +273,8 @@ public class HistoricoPessoaServiceImplTest {
 
 		Page<HistoricoPessoa> response = this.historicoPessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 
 	@Test
@@ -282,20 +282,19 @@ public class HistoricoPessoaServiceImplTest {
 
 		Page<HistoricoPessoa> response = this.historicoPessoaServiceImpl.list(null, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 
-	@Test(expected=CustomException.class)
+	@Test()
 	public void listComPageableNullTest() throws CustomException {
 
 		HistoricoPessoa request = HistoricoPessoa.builder()
 				.build();
-
-		Page<HistoricoPessoa> response = this.historicoPessoaServiceImpl.list(request, null);
-
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		
+		assertThrows(CustomException.class, () -> {
+			this.historicoPessoaServiceImpl.list(request, null);
+		});
 	}
 
 	@Test
@@ -307,8 +306,8 @@ public class HistoricoPessoaServiceImplTest {
 
 		Page<HistoricoPessoa> response = this.historicoPessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 	
 	@Test
@@ -320,8 +319,8 @@ public class HistoricoPessoaServiceImplTest {
 
 		Page<HistoricoPessoa> response = this.historicoPessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 	
 	@Test
@@ -333,8 +332,8 @@ public class HistoricoPessoaServiceImplTest {
 
 		Page<HistoricoPessoa> response = this.historicoPessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 	
 	@Test
@@ -346,8 +345,8 @@ public class HistoricoPessoaServiceImplTest {
 
 		Page<HistoricoPessoa> response = this.historicoPessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 
 }

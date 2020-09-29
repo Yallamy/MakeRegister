@@ -1,23 +1,23 @@
 package br.com.registerApi.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import java.util.Calendar;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.registerApi.EntityGenericUtil;
 import br.com.registerApi.dto.PessoaDTO;
 import br.com.registerApi.entity.Pessoa;
-import junit.framework.TestCase;
 
 /**
  * Classe de teste que representa os cenários de testes da classe {@link Util}
  * @author Yallamy Nascimento (yallamy@gmail.com)
  * @since 11 de set de 2020
  */
-@RunWith(SpringRunner.class)
 public class UtilTest {
 	
 	@InjectMocks
@@ -36,8 +36,8 @@ public class UtilTest {
 		
 		PessoaDTO character = util.convertModelMapper(pessoa, PessoaDTO.class);
 
-		TestCase.assertNotNull(pessoa);
-		TestCase.assertNotNull(character);
+		assertNotNull(pessoa);
+		assertNotNull(character);
 	}
 	
 	@SuppressWarnings("static-access")
@@ -46,7 +46,7 @@ public class UtilTest {
 		
 		Pessoa pessoa = util.convertModelMapper(null, Pessoa.class);
 
-		TestCase.assertNull(pessoa);
+		assertNull(pessoa);
 	}
 	
 	@SuppressWarnings("static-access")
@@ -60,7 +60,7 @@ public class UtilTest {
 		
 		Pessoa pessoa = util.convertModelMapper(source, null);
 
-		TestCase.assertNull(pessoa);
+		assertNull(pessoa);
 	}
 
 	@SuppressWarnings("static-access")
@@ -71,7 +71,7 @@ public class UtilTest {
 		dataInicial.set(Calendar.getInstance().get(Calendar.YEAR) - Constantes.PERIODO_VALIDADE, 
 				Calendar.JANUARY, 1);
 	
-		TestCase.assertEquals(dataInicial, util.getDataInicial());
+		assertEquals(dataInicial, util.getDataInicial());
 	}
 
 }

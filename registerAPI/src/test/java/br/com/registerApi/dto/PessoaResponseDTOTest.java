@@ -1,21 +1,20 @@
 package br.com.registerApi.dto;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.Date;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import br.com.registerApi.EntityGenericUtil;
-import junit.framework.TestCase;
 
 /**
  * Classe de teste que representa os cenários de testes da classe {@link PessoaResponseDTO}
  * @author Yallamy Nascimento (yallamy@gmail.com)
  * @since 11 de set de 2020
  */
-@RunWith(SpringRunner.class)
 public class PessoaResponseDTOTest {
 
 	private Long id;
@@ -34,7 +33,7 @@ public class PessoaResponseDTOTest {
 	
 	private String cpf;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 
 		this.id = EntityGenericUtil.getLong();
@@ -53,15 +52,15 @@ public class PessoaResponseDTOTest {
 		PessoaResponseDTO response = new PessoaResponseDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertEquals(this.id, response.getId());
-		TestCase.assertEquals(this.nome, response.getNome());
-		TestCase.assertEquals(this.genero, response.getGenero());
-		TestCase.assertEquals(this.email, response.getEmail());
-		TestCase.assertEquals(this.dtNascimento, response.getDtNascimento());
-		TestCase.assertEquals(this.naturalidade, response.getNaturalidade());
-		TestCase.assertEquals(this.nacionalidade, response.getNacionalidade());
-		TestCase.assertEquals(this.cpf, response.getCpf());
+		assertNotNull(response);
+		assertEquals(this.id, response.getId());
+		assertEquals(this.nome, response.getNome());
+		assertEquals(this.genero, response.getGenero());
+		assertEquals(this.email, response.getEmail());
+		assertEquals(this.dtNascimento, response.getDtNascimento());
+		assertEquals(this.naturalidade, response.getNaturalidade());
+		assertEquals(this.nacionalidade, response.getNacionalidade());
+		assertEquals(this.cpf, response.getCpf());
 	}
 	
 	@Test
@@ -69,15 +68,15 @@ public class PessoaResponseDTOTest {
 
 		PessoaResponseDTO response = new PessoaResponseDTO();
 
-		TestCase.assertNotNull(response);
-		TestCase.assertEquals(null, response.getId());
-		TestCase.assertEquals(null, response.getNome());
-		TestCase.assertEquals(null, response.getGenero());
-		TestCase.assertEquals(null, response.getEmail());
-		TestCase.assertEquals(null, response.getDtNascimento());
-		TestCase.assertEquals(null, response.getNaturalidade());
-		TestCase.assertEquals(null, response.getNacionalidade());
-		TestCase.assertEquals(null, response.getCpf());
+		assertNotNull(response);
+		assertEquals(null, response.getId());
+		assertEquals(null, response.getNome());
+		assertEquals(null, response.getGenero());
+		assertEquals(null, response.getEmail());
+		assertEquals(null, response.getDtNascimento());
+		assertEquals(null, response.getNaturalidade());
+		assertEquals(null, response.getNacionalidade());
+		assertEquals(null, response.getCpf());
 	}
 
 	@Test
@@ -98,14 +97,14 @@ public class PessoaResponseDTOTest {
 		response.setNacionalidade(this.nacionalidade);
 		response.setCpf(this.cpf);
 
-		TestCase.assertEquals(this.id, response.getId());
-		TestCase.assertEquals(this.nome, response.getNome());
-		TestCase.assertEquals(this.genero, response.getGenero());
-		TestCase.assertEquals(this.email, response.getEmail());
-		TestCase.assertEquals(this.dtNascimento, response.getDtNascimento());
-		TestCase.assertEquals(this.naturalidade, response.getNaturalidade());
-		TestCase.assertEquals(this.nacionalidade, response.getNacionalidade());
-		TestCase.assertEquals(this.cpf, response.getCpf());
+		assertEquals(this.id, response.getId());
+		assertEquals(this.nome, response.getNome());
+		assertEquals(this.genero, response.getGenero());
+		assertEquals(this.email, response.getEmail());
+		assertEquals(this.dtNascimento, response.getDtNascimento());
+		assertEquals(this.naturalidade, response.getNaturalidade());
+		assertEquals(this.nacionalidade, response.getNacionalidade());
+		assertEquals(this.cpf, response.getCpf());
 	}
 	
 	@Test
@@ -117,9 +116,9 @@ public class PessoaResponseDTOTest {
 		PessoaResponseDTO response2 = new PessoaResponseDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response2);
-		TestCase.assertEquals(response, response2);
+		assertNotNull(response);
+		assertNotNull(response2);
+		assertEquals(response, response2);
 	}
 	
 	@Test
@@ -131,9 +130,9 @@ public class PessoaResponseDTOTest {
 		PessoaResponseDTO response2 = new PessoaResponseDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response2);
-		TestCase.assertEquals(response.hashCode(), response2.hashCode());
+		assertNotNull(response);
+		assertNotNull(response2);
+		assertEquals(response.hashCode(), response2.hashCode());
 	}
 	
 	@Test
@@ -142,8 +141,8 @@ public class PessoaResponseDTOTest {
 		PessoaResponseDTO response = new PessoaResponseDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.toString());
+		assertNotNull(response);
+		assertNotNull(response.toString());
 	}
 
 }

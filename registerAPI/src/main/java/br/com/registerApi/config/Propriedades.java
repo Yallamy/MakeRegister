@@ -1,6 +1,5 @@
 package br.com.registerApi.config;
 
-import org.junit.Ignore;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
@@ -14,7 +13,6 @@ import lombok.Setter;
  * @since 11 de set de 2020
  */
 @ConfigurationProperties(ignoreUnknownFields = true)
-@Ignore
 @Getter
 @Setter
 @EnableConfigurationProperties

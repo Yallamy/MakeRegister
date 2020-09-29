@@ -1,21 +1,20 @@
 package br.com.registerApi.dto;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.Date;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import br.com.registerApi.EntityGenericUtil;
-import junit.framework.TestCase;
 
 /**
  * Classe de teste que representa os cenários de testes da classe {@link PessoaRequestDTO}
  * @author Yallamy Nascimento (yallamy@gmail.com)
  * @since 11 de set de 2020
  */
-@RunWith(SpringRunner.class)
 public class PessoaRequestDTOTest {
 	
 	private Long id;
@@ -34,7 +33,7 @@ public class PessoaRequestDTOTest {
 	
 	private String cpf;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 
 		this.id = EntityGenericUtil.getLong();
@@ -53,15 +52,15 @@ public class PessoaRequestDTOTest {
 		PessoaRequestDTO request = new PessoaRequestDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
-		TestCase.assertNotNull(request);
-		TestCase.assertEquals(this.id, request.getId());
-		TestCase.assertEquals(this.nome, request.getNome());
-		TestCase.assertEquals(this.genero, request.getGenero());
-		TestCase.assertEquals(this.email, request.getEmail());
-		TestCase.assertEquals(this.dtNascimento, request.getDtNascimento());
-		TestCase.assertEquals(this.naturalidade, request.getNaturalidade());
-		TestCase.assertEquals(this.nacionalidade, request.getNacionalidade());
-		TestCase.assertEquals(this.cpf, request.getCpf());
+		assertNotNull(request);
+		assertEquals(this.id, request.getId());
+		assertEquals(this.nome, request.getNome());
+		assertEquals(this.genero, request.getGenero());
+		assertEquals(this.email, request.getEmail());
+		assertEquals(this.dtNascimento, request.getDtNascimento());
+		assertEquals(this.naturalidade, request.getNaturalidade());
+		assertEquals(this.nacionalidade, request.getNacionalidade());
+		assertEquals(this.cpf, request.getCpf());
 	}
 	
 	@Test
@@ -78,15 +77,31 @@ public class PessoaRequestDTOTest {
 				.cpf(this.cpf)
 				.build();
 
-		TestCase.assertNotNull(request);
-		TestCase.assertEquals(this.id, request.getId());
-		TestCase.assertEquals(this.nome, request.getNome());
-		TestCase.assertEquals(this.genero, request.getGenero());
-		TestCase.assertEquals(this.email, request.getEmail());
-		TestCase.assertEquals(this.dtNascimento, request.getDtNascimento());
-		TestCase.assertEquals(this.naturalidade, request.getNaturalidade());
-		TestCase.assertEquals(this.nacionalidade, request.getNacionalidade());
-		TestCase.assertEquals(this.cpf, request.getCpf());
+		assertNotNull(request);
+		assertEquals(this.id, request.getId());
+		assertEquals(this.nome, request.getNome());
+		assertEquals(this.genero, request.getGenero());
+		assertEquals(this.email, request.getEmail());
+		assertEquals(this.dtNascimento, request.getDtNascimento());
+		assertEquals(this.naturalidade, request.getNaturalidade());
+		assertEquals(this.nacionalidade, request.getNacionalidade());
+		assertEquals(this.cpf, request.getCpf());
+	}
+	
+	@Test
+	public void getInstanceVaziaTest() {
+
+		PessoaRequestDTO request = new PessoaRequestDTO();
+
+		assertNotNull(request);
+		assertEquals(null, request.getId());
+		assertEquals(null, request.getNome());
+		assertEquals(null, request.getGenero());
+		assertEquals(null, request.getEmail());
+		assertEquals(null, request.getDtNascimento());
+		assertEquals(null, request.getNaturalidade());
+		assertEquals(null, request.getNacionalidade());
+		assertEquals(null, request.getCpf());
 	}
 
 	@Test
@@ -107,14 +122,14 @@ public class PessoaRequestDTOTest {
 		request.setNacionalidade(this.nacionalidade);
 		request.setCpf(this.cpf);
 
-		TestCase.assertEquals(this.id, request.getId());
-		TestCase.assertEquals(this.nome, request.getNome());
-		TestCase.assertEquals(this.genero, request.getGenero());
-		TestCase.assertEquals(this.email, request.getEmail());
-		TestCase.assertEquals(this.dtNascimento, request.getDtNascimento());
-		TestCase.assertEquals(this.naturalidade, request.getNaturalidade());
-		TestCase.assertEquals(this.nacionalidade, request.getNacionalidade());
-		TestCase.assertEquals(this.cpf, request.getCpf());
+		assertEquals(this.id, request.getId());
+		assertEquals(this.nome, request.getNome());
+		assertEquals(this.genero, request.getGenero());
+		assertEquals(this.email, request.getEmail());
+		assertEquals(this.dtNascimento, request.getDtNascimento());
+		assertEquals(this.naturalidade, request.getNaturalidade());
+		assertEquals(this.nacionalidade, request.getNacionalidade());
+		assertEquals(this.cpf, request.getCpf());
 	}
 	
 	@Test
@@ -126,9 +141,9 @@ public class PessoaRequestDTOTest {
 		PessoaRequestDTO request2 = new PessoaRequestDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
-		TestCase.assertNotNull(request);
-		TestCase.assertNotNull(request2);
-		TestCase.assertEquals(request, request2);
+		assertNotNull(request);
+		assertNotNull(request2);
+		assertEquals(request, request2);
 	}
 	
 	@Test
@@ -140,9 +155,9 @@ public class PessoaRequestDTOTest {
 		PessoaRequestDTO request2 = new PessoaRequestDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
-		TestCase.assertNotNull(request);
-		TestCase.assertNotNull(request2);
-		TestCase.assertEquals(request.hashCode(), request2.hashCode());
+		assertNotNull(request);
+		assertNotNull(request2);
+		assertEquals(request.hashCode(), request2.hashCode());
 	}
 	
 	@Test
@@ -151,8 +166,8 @@ public class PessoaRequestDTOTest {
 		PessoaRequestDTO request = new PessoaRequestDTO(this.id, this.nome, this.genero, this.email, 
 				this.dtNascimento, this.naturalidade, this.nacionalidade, this.cpf);
 
-		TestCase.assertNotNull(request);
-		TestCase.assertNotNull(request.toString());
+		assertNotNull(request);
+		assertNotNull(request.toString());
 	}
 
 }

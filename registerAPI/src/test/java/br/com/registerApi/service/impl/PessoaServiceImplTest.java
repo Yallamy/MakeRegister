@@ -1,32 +1,23 @@
 package br.com.registerApi.service.impl;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasToString;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.registerApi.EntityGenericUtil;
 import br.com.registerApi.entity.HistoricoPessoa;
@@ -34,14 +25,13 @@ import br.com.registerApi.entity.Pessoa;
 import br.com.registerApi.exception.CustomException;
 import br.com.registerApi.repository.PessoaRepository;
 import br.com.registerApi.service.HistoricoPessoaService;
-import junit.framework.TestCase;
 
 /**
  * Classe de teste que representa os cenários de testes da classe {@link PessoaServiceImpl}
  * @author Yallamy Nascimento (yallamy@gmail.com)
  * @since 11 de set de 2020
  */
-@RunWith(SpringRunner.class)
+@SpringBootTest
 public class PessoaServiceImplTest {
 
 	@InjectMocks
@@ -66,12 +56,10 @@ public class PessoaServiceImplTest {
 	
 	private Pessoa pessoa;
 	
-	private Validator validator;
-	
 	private Date dtNascimento;
 
 	@SuppressWarnings("unchecked")
-	@Before
+	@BeforeEach
 	public void setup() throws CustomException {
 		
 		this.pessoa = Pessoa.builder()
@@ -90,9 +78,6 @@ public class PessoaServiceImplTest {
 		dataInicial.set(1950, Calendar.JANUARY, 1);
 		
 		this.dtNascimento = dataInicial.getTime();
-		
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        this.validator = factory.getValidator();
 
 		Mockito.when(this.repository.save(
 				Mockito.any(Pessoa.class))).thenReturn(this.pessoa);
@@ -123,18 +108,21 @@ public class PessoaServiceImplTest {
 		this.pessoaServiceImpl.init();
 		Pessoa response = this.pessoaServiceImpl.create(request);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getId());
+		assertNotNull(response);
+		assertNotNull(response.getId());
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createPessoaNullTest() throws CustomException {
 
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.create(null);
+		
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.create(null);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createPessoaJaCadastradaTest() throws CustomException {
 		
 		Mockito.when(this.repository.findByCpf(
@@ -151,10 +139,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.create(request);
+		
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.create(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createPessoaSemNomeTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
@@ -167,15 +158,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		Pessoa response = this.pessoaServiceImpl.create(request);
 
-		TestCase.assertNotNull(response);
-		Set<ConstraintViolation<Pessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("nome"))));
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.create(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createPessoaSemDtNascimentoTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
@@ -188,15 +177,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		Pessoa response = this.pessoaServiceImpl.create(request);
 
-		TestCase.assertNotNull(response);
-		Set<ConstraintViolation<Pessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("dtNascimento"))));
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.create(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createPessoaSemCPFTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
@@ -209,15 +196,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		Pessoa response = this.pessoaServiceImpl.create(request);
 
-		TestCase.assertNotNull(response);
-		Set<ConstraintViolation<Pessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("cpf"))));
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.create(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createPessoaComEmailInvalidoTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
@@ -231,15 +216,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		Pessoa response = this.pessoaServiceImpl.create(request);
 
-		TestCase.assertNotNull(response);
-		Set<ConstraintViolation<Pessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("email"))));
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.create(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createPessoaComCPFInvalidoTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
@@ -253,15 +236,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		Pessoa response = this.pessoaServiceImpl.create(request);
 
-		TestCase.assertNotNull(response);
-		Set<ConstraintViolation<Pessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("cpf"))));
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.create(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createDtInvalidaTest() throws CustomException {
 		
 		Calendar dataInvalida = Calendar.getInstance();
@@ -278,10 +259,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.create(request);
+		
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.create(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void createDtInvalidaFuturaTest() throws CustomException {
 		
 		Calendar dataInvalida = Calendar.getInstance();
@@ -298,7 +282,10 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.create(request);
+		
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.create(request);
+		});
 	}
 	
 	//update
@@ -320,14 +307,17 @@ public class PessoaServiceImplTest {
 		this.pessoaServiceImpl.update(request);
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void updatePessoaNullTest() throws CustomException {
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.update(null);
+		
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.update(null);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void updatePessoaJaCadastradaTest() throws CustomException {
 		
 		Mockito.when(this.repository.findByCpf(
@@ -345,10 +335,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.update(request);
+		
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.update(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void updatePessoaNotFoundTest() throws CustomException {
 		
 		Mockito.when(this.repository.findById(
@@ -366,10 +359,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.update(request);
+		
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.update(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void updatePessoaSemNomeTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
@@ -383,14 +379,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.update(request);
 
-		Set<ConstraintViolation<Pessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("nome"))));
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.update(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void updatePessoaSemDtNascimentoTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
@@ -404,14 +399,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.update(request);
-
-		Set<ConstraintViolation<Pessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("dtNascimento"))));
+		
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.update(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void updatePessoaSemCPFTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
@@ -425,14 +419,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.update(request);
-
-		Set<ConstraintViolation<Pessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("cpf"))));
+		
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.update(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void updatePessoaComEmailInvalidoTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
@@ -447,14 +440,13 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.update(request);
 
-		Set<ConstraintViolation<Pessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("email"))));
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.update(request);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void updatePessoaComCpfInvalidoTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
@@ -469,11 +461,10 @@ public class PessoaServiceImplTest {
 				.build();
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.update(request);
 
-		Set<ConstraintViolation<Pessoa>> violations = validator.validate(request);
-		assertTrue(violations.size() == 1);
-		assertThat(violations, contains(hasProperty("propertyPath", hasToString("cpf"))));
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.update(request);
+		});
 	}
 	
 	//retrieve
@@ -482,27 +473,31 @@ public class PessoaServiceImplTest {
 		
 		Pessoa response = this.pessoaServiceImpl.retrieve(EntityGenericUtil.getLong());
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getId());
-		TestCase.assertEquals(this.pessoa, response);
+		assertNotNull(response);
+		assertNotNull(response.getId());
+		assertEquals(this.pessoa, response);
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void retrieveNotFoundTest() throws CustomException {
 		
 		Mockito.when(this.repository.findById(
 				Mockito.any(Long.class))).thenThrow(NoSuchElementException.class);
 		
-		this.pessoaServiceImpl.retrieve(EntityGenericUtil.getLong());
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.retrieve(EntityGenericUtil.getLong());
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void retrieveComNullTest() throws CustomException {
 		
 		Mockito.when(this.repository.findById(
 				Mockito.any(Long.class))).thenReturn(null);
 		
-		this.pessoaServiceImpl.retrieve(null);
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.retrieve(null);
+		});
 	}
 	
 	//delete
@@ -513,24 +508,30 @@ public class PessoaServiceImplTest {
 		this.pessoaServiceImpl.delete(this.pessoa);
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void deleteNotFoundTest() throws CustomException {
 		
 		Mockito.when(this.repository.findById(
 				Mockito.any(Long.class))).thenThrow(NoSuchElementException.class);
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.delete(this.pessoa);
+		
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.delete(this.pessoa);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void deletePessoamNullTest() throws CustomException {
 		
 		this.pessoaServiceImpl.init();
-		this.pessoaServiceImpl.delete(null);
+		
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.delete(null);
+		});
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void deletePessoaSemIdTest() throws CustomException {
 
 		Pessoa request = Pessoa.builder()
@@ -543,7 +544,9 @@ public class PessoaServiceImplTest {
 				.cpf(EntityGenericUtil.getCPF())
 				.build();
 		
-		this.pessoaServiceImpl.delete(request);
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.delete(request);
+		});
 	}
 	
 	//list
@@ -555,8 +558,8 @@ public class PessoaServiceImplTest {
 		
 		Page<Pessoa> response = this.pessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 	
 	@Test
@@ -564,20 +567,19 @@ public class PessoaServiceImplTest {
 		
 		Page<Pessoa> response = this.pessoaServiceImpl.list(null, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 	
-	@Test(expected=CustomException.class)
+	@Test()
 	public void listComPageableNullTest() throws CustomException {
 		
 		Pessoa request = Pessoa.builder()
 				.build();
-		
-		Page<Pessoa> response = this.pessoaServiceImpl.list(request, null);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertThrows(CustomException.class, () -> {
+			this.pessoaServiceImpl.list(request, null);
+		});
 	}
 	
 	@Test
@@ -589,8 +591,8 @@ public class PessoaServiceImplTest {
 		
 		Page<Pessoa> response = this.pessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 	
 	@Test
@@ -602,8 +604,8 @@ public class PessoaServiceImplTest {
 		
 		Page<Pessoa> response = this.pessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 	
 	@Test
@@ -615,8 +617,8 @@ public class PessoaServiceImplTest {
 		
 		Page<Pessoa> response = this.pessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 	
 	
@@ -629,8 +631,8 @@ public class PessoaServiceImplTest {
 		
 		Page<Pessoa> response = this.pessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 	
 	
@@ -643,8 +645,8 @@ public class PessoaServiceImplTest {
 		
 		Page<Pessoa> response = this.pessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 	
 	@Test
@@ -656,8 +658,8 @@ public class PessoaServiceImplTest {
 		
 		Page<Pessoa> response = this.pessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 	
 	@Test
@@ -669,7 +671,7 @@ public class PessoaServiceImplTest {
 		
 		Page<Pessoa> response = this.pessoaServiceImpl.list(request, pageable);
 
-		TestCase.assertNotNull(response);
-		TestCase.assertNotNull(response.getContent().size() == 1);
+		assertNotNull(response);
+		assertNotNull(response.getContent().size() == 1);
 	}
 }
