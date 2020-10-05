@@ -26,7 +26,7 @@ public interface HistoricoPessoaRepository extends JpaRepository<HistoricoPessoa
 	public List<HistoricoPessoa> findAllByPessoa(Pessoa pessoa);
 	
 	/**
-	 * Método que rdeleta todo o histórico de uma pessoa.
+	 * Método que deleta todo o histórico de uma pessoa.
 	 * @param pessoa - pessoa a ter o histórico deletado
 	 * @return long - quantidade de registros deletados
 	 * @author Yallamy Nascimento (yallamy@gmail.com)
